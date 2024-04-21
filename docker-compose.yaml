@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  backend:
+    image: "node:8"
+    build: ./api
+    # ports: 
+    #   - "4000:4000"
+    volumes:
+      - ./api:/index
+      - /api/node_modules
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    depends_on:
+     - backend
+    ports:
+      - 4000:4000
+      
+
+  frontend:
+    build: ./client
+    ports: 
+      - "3000:3000"
+    volumes:
+      - ./client/src:/app/src
+
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+volumes:
+  data: 
+  logs:
+      
